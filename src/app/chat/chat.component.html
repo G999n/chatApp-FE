@@ -1,0 +1,24 @@
+<div style="padding: 20px; max-width: 600px; margin: auto;">
+    <h2>Group Chat</h2>
+  
+    <div>
+      <input [(ngModel)]="username" placeholder="Your name" />
+    </div>
+  
+    <div style="margin-top: 10px;">
+      <input [(ngModel)]="message" (input)="onTyping()" placeholder="Type a message..." />
+      <button (click)="send()">Send</button>
+    </div>
+  
+    <div *ngIf="typingUsers.length > 0" style="margin-top: 5px; font-style: italic; color: gray;">
+      {{ typingUsers.join(', ') }} {{ typingUsers.length === 1 ? 'is' : 'are' }} typing...
+    </div>
+  
+    <div style="margin-top: 20px;">
+      <div *ngFor="let msg of chatService.messages">
+        <strong>{{ msg.user }}:</strong> {{ msg.message }}
+        <small style="color: gray;">({{ msg.timestamp | date:'shortTime' }})</small>
+      </div>
+    </div>
+  </div>
+  
