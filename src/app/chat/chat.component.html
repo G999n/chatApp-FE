@@ -1,24 +1,40 @@
-<div style="padding: 20px; max-width: 600px; margin: auto;">
-    <h2>Group Chat</h2>
-  
-    <div>
-      <input [(ngModel)]="username" placeholder="Your name" />
-    </div>
-  
-    <div style="margin-top: 10px;">
-      <input [(ngModel)]="message" (input)="onTyping()" placeholder="Type a message..." />
-      <button (click)="send()">Send</button>
-    </div>
-  
-    <div *ngIf="typingUsers.length > 0" style="margin-top: 5px; font-style: italic; color: gray;">
-      {{ typingUsers.join(', ') }} {{ typingUsers.length === 1 ? 'is' : 'are' }} typing...
-    </div>
-  
-    <div style="margin-top: 20px;">
-      <div *ngFor="let msg of chatService.messages">
-        <strong>{{ msg.user }}:</strong> {{ msg.message }}
-        <small style="color: gray;">({{ msg.timestamp | date:'shortTime' }})</small>
-      </div>
+<div class="chat-container">
+  <h2>Group Chat</h2>
+
+  <input [(ngModel)]="username" placeholder="Your name" />
+
+  <div class="messages-box" #messagesContainer (scroll)="checkScrollPosition()">
+    <div *ngFor="let msg of chatService.messages">
+      <strong>{{ msg.user }}:</strong> {{ msg.message }}
+      <small class="timestamp">({{ msg.timestamp | date: 'shortTime' }})</small>
     </div>
   </div>
+
+  <div
+    *ngIf="showNewMessageNotification"
+    class="new-message-notice"
+    (click)="scrollToBottom(true)"
+  >
+    New message ↓
+  </div>
+
+  <div *ngIf="typingUsers.length">
+    {{ typingUsers.join(', ') }} {{ typingUsers.length === 1 ? 'is' : 'are' }} typing...
+  </div>
   
+  <div *ngIf="showNameWarning" @fadeInOut class="name-warning">
+    Please enter your name before sending a message.
+  </div>
+
+  <div class="input-container">
+    <textarea
+      #messageBox
+      [(ngModel)]="message"
+      (keydown)="handleKeyDown($event, messageBox)"
+      (input)="onTyping(); autoResize(messageBox)"
+      placeholder="Type a message..."
+      rows="1"
+    ></textarea>
+    <button (click)="send(messageBox)">Send</button>
+  </div>
+</div>
