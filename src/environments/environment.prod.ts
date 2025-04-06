@@ -1,5 +1,5 @@
 export const environment = {
     production: true,
-    apiUrl: 'https://yourdomain.com' // change this once deployed
-  };
+    apiUrl: 'https://chatappserver-zgvg.onrender.com' // change this once deployed
+};
   
